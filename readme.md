@@ -1,6 +1,4 @@
-Hello World
-===========
+Textmining SS 2015
+==================
 
-Das ist ein Beispielrepository für die Textmining Vorlesung.
-
-Eine kleine Erweiterung.
+Implementierungen für die Textmining-Vorlesung.
