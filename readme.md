@@ -1,4 +1,6 @@
 Hello World
 ===========
 
-Das ist ein Beispielrepository für die Textmining Vorlesung.
+Das ist ein Beispielrepository fÃ¼r die Textmining Vorlesung.
+
+Eine kleine Erweiterung.
