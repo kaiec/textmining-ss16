@@ -21,11 +21,9 @@ public class tm {
         } else {
             works = sp.readFiles(args[0]);
         }
-        for (Work work: works.getAll()) {
-            for (Speaker speaker: work.getSpeakers()) {
-                System.out.println(speaker.getName() + ": " + work.getNumberOfMonologuesBySpeaker(speaker) + " times, " + work.getWordsBySpeaker(speaker) + " words, " + work.getWordsBySpeaker(speaker)/work.getNumberOfMonologuesBySpeaker(speaker) + " words per monologue.");
+            for (Speaker speaker: works.getAllSpeakers()) {
+                System.out.println(speaker.getName() + ": " + speaker.getNumberOfMonologues() + " times, " + speaker.getNumberOfWords() + " words, " + speaker.getNumberOfWords()/speaker.getNumberOfMonologues() + " words per monologue.");
             }
-        }
         
         
     }

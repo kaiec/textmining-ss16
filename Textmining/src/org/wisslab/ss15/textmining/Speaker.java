@@ -33,7 +33,16 @@ public class Speaker {
         this.name = name;
         this.work = work;
     }
+    
+    public int getNumberOfMonologues() {
+        return work.getNumberOfMonologuesBySpeaker(this);
+    }
 
+    public int getNumberOfWords() {
+        return work.getWordsBySpeaker(this);
+    }
+
+    
     @Override
     public String toString() {
         return "Speaker{" + "name=" + name + ", work=" + work + '}';
