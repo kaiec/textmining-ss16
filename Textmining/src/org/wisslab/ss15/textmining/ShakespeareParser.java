@@ -6,12 +6,15 @@
 package org.wisslab.ss15.textmining;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +30,7 @@ public class ShakespeareParser {
         // zeilenübergreifend bereinigen können.
         String fulltext = "";
         Work work = new Work();
+        Map<String, Speaker> speakers = new HashMap<>();
 
         // Google: java read text file line by line
         // 1. Treffer: http://stackoverflow.com/questions/5868369/how-to-read-a-large-text-file-line-by-line-using-java
@@ -77,7 +81,11 @@ public class ShakespeareParser {
                     // System.out.println("End: " + tagname);
                     Monologue mon = new Monologue();
                     mon.setText(tmp.toString().trim());
-                    mon.setSpeaker(tagname);
+                    
+                    // Speaker verwalten und zuweisen
+                    speakers.putIfAbsent(tagname, new Speaker(tagname, work));
+                    mon.setSpeaker(speakers.get(tagname));
+                    
                     mon.setPath(new ArrayList<String>(path));
                     tmp.setLength(0);
                     path.remove(path.size() - 1);
@@ -89,7 +97,7 @@ public class ShakespeareParser {
             } else {
                 // Wenn es kein Tag ist, schauen wir noch, ob die Zeile eingerückt ist, falls ja: Text
                 if (line.startsWith("\t")) {
-                    tmp.append(line.replaceFirst("\t", "")).append(" ");
+                    tmp.append(line.trim()).append(" ");
                 }
             }
 
@@ -97,5 +105,18 @@ public class ShakespeareParser {
 
         return work;
 
+    }
+    
+    public List<Work> readFiles(String directory) {
+        List<Work> res = new ArrayList<>();
+        File dir = new File(directory);
+        for (File f: dir.listFiles()) {
+            if (f.isFile() && f.getName().toLowerCase().endsWith(".txt")) {
+                res.add(readFile(f.getAbsolutePath()));
+            } else if (f.isDirectory() && !f.getName().toLowerCase().endsWith("_characters")) {
+                res.addAll(readFiles(f.getAbsolutePath()));
+            }
+        }
+        return res;
     }
 }

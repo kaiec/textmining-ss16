@@ -12,15 +12,15 @@ import java.util.List;
  * @author kai
  */
 public class Monologue {
-    private String speaker;
+    private Speaker speaker;
     private List<String> path;
     private String text;
 
-    public String getSpeaker() {
+    public Speaker getSpeaker() {
         return speaker;
     }
 
-    public void setSpeaker(String speaker) {
+    public void setSpeaker(Speaker speaker) {
         this.speaker = speaker;
     }
 

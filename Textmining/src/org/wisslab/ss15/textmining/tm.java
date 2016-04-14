@@ -5,6 +5,8 @@
  */
 package org.wisslab.ss15.textmining;
 
+import java.util.List;
+
 /**
  *
  * @author kai
@@ -13,15 +15,16 @@ public class tm {
     
     public static void main(String[] args) {
         ShakespeareParser sp = new ShakespeareParser();
-        Work work = null;
+        List<Work> works = null;
         if (args.length==0) {
-            work = sp.readFile("C:\\Users\\kai\\Downloads\\ShakespearePlaysPlus\\TXT\\historical\\The Tragedy of King Richard II.txt");
+            works = sp.readFiles("C:\\Users\\kai\\Downloads\\ShakespearePlaysPlus\\TXT");
         } else {
-            work = sp.readFile(args[0]);
+            works = sp.readFiles(args[0]);
         }
-        
-        for (String name: work.getSpeakers()) {
-            System.out.println(name + ": " + work.getNumberOfMonologuesBySpeaker(name) + " times, " + work.getWordsBySpeaker(name) + " words, " + work.getWordsBySpeaker(name)/work.getNumberOfMonologuesBySpeaker(name) + " words per monologue.");
+        for (Work work: works) {
+            for (Speaker speaker: work.getSpeakers()) {
+                System.out.println(speaker.getName() + ": " + work.getNumberOfMonologuesBySpeaker(speaker) + " times, " + work.getWordsBySpeaker(speaker) + " words, " + work.getWordsBySpeaker(speaker)/work.getNumberOfMonologuesBySpeaker(speaker) + " words per monologue.");
+            }
         }
         
         
