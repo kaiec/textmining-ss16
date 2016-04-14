@@ -107,8 +107,8 @@ public class ShakespeareParser {
 
     }
     
-    public List<Work> readFiles(String directory) {
-        List<Work> res = new ArrayList<>();
+    public AllWorks readFiles(String directory) {
+        AllWorks res = new AllWorks();
         File dir = new File(directory);
         for (File f: dir.listFiles()) {
             if (f.isFile() && f.getName().toLowerCase().endsWith(".txt")) {

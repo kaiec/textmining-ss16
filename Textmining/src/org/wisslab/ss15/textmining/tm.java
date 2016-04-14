@@ -15,13 +15,13 @@ public class tm {
     
     public static void main(String[] args) {
         ShakespeareParser sp = new ShakespeareParser();
-        List<Work> works = null;
+        AllWorks works = null;
         if (args.length==0) {
             works = sp.readFiles("C:\\Users\\kai\\Downloads\\ShakespearePlaysPlus\\TXT");
         } else {
             works = sp.readFiles(args[0]);
         }
-        for (Work work: works) {
+        for (Work work: works.getAll()) {
             for (Speaker speaker: work.getSpeakers()) {
                 System.out.println(speaker.getName() + ": " + work.getNumberOfMonologuesBySpeaker(speaker) + " times, " + work.getWordsBySpeaker(speaker) + " words, " + work.getWordsBySpeaker(speaker)/work.getNumberOfMonologuesBySpeaker(speaker) + " words per monologue.");
             }
