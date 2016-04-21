@@ -23,7 +23,8 @@ public class tm {
         }
             for (Speaker speaker: works.getAllSpeakers()) {
                 System.out.println(speaker.getName() + ": " + speaker.getNumberOfMonologues() + " times, " + speaker.getNumberOfWords() + " words");
-                System.out.println(speaker.getAllText().split(" ").length);
+                System.out.println(speaker.getVSMVector().size());
+                
             }
         
         

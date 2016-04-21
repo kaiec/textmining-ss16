@@ -6,7 +6,11 @@
 package org.wisslab.ss15.textmining;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -55,6 +59,42 @@ public class Speaker {
             sum += m.getText().split(" ").length;
         }
         return sum;
+    }
+
+    public double getTFIDF(String word) {
+        Map<String, Double> tfmap = getTF();
+        double tf = 0;
+        if (tfmap.get(word)!=null) tf = tfmap.get(word);
+        Map<String, Double> dfmap = getWork().getDF();
+        double df = dfmap.get(word);
+        int D = work.getSpeakers().size();
+        return tf * Math.log(D/df);
+    }
+    
+    public List<Double> getVSMVector() {
+        List<Double> result = new ArrayList<>();
+        for (String word: work.getDF().keySet()) {
+            result.add(getTFIDF(word));
+        }
+        return result;
+    }
+    
+    public Map<String, Double> getTF() {
+        Map<String, Double> result = new HashMap<>();
+        Pattern p1 = Pattern.compile("[a-zA-Z']+");
+     
+        for (String word: getAllText().split(" ")) {
+            // Das ist quasi Tokenization, dafür gibt es Spezialbibliotheken
+            word = word.replaceAll(",", "");
+            word = word.replaceAll(".", "");
+            word = word.replaceAll(":", "");
+            word = word.replaceAll(";", "");
+            word = word.toLowerCase();
+            if (!p1.matcher(word).matches()) continue;
+            result.putIfAbsent(word, 0d);
+            result.put(word, result.get(word) + 1);
+        }
+        return result;
     }
 
     

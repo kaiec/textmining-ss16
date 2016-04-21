@@ -55,6 +55,22 @@ public class Work {
         return new Speaker(name, this);
     }
     
+    
+    public Map<String, Double> getDF() {
+        Map<String, Double> res = new HashMap<>();
+        for (Speaker s:getSpeakers()) {
+            Map<String, Double> tf = s.getTF();
+            for (String word: tf.keySet()) {
+                res.putIfAbsent(word, 0d);
+                res.put(word, res.get(word) + 1);
+            
+            }
+        }
+        return res;
+    }
+    
+    
+    
     public List<Monologue> getMonologues() {
         return monologues;
     }
