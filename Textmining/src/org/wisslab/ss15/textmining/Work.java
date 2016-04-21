@@ -19,10 +19,18 @@ public class Work {
     private List<Monologue> monologues = new ArrayList<>();
     private List<Speaker> speakers = new ArrayList<>();
     private String filename;
+    private AllWorks allWorks;
     
-    public Work() {
-        
+    public Work(AllWorks allWorks) {
+        this.allWorks = allWorks;
+        allWorks.add(this);
     }
+
+    public AllWorks getAllWorks() {
+        return allWorks;
+    }
+    
+    
 
     public String getFilename() {
         return filename;
@@ -71,6 +79,9 @@ public class Work {
         return res;
     }
     
+    public List<String> getUniqueWords() {
+        return new ArrayList<String>(getDF().keySet());
+    }
     
     
     public List<Monologue> getMonologues() {
@@ -87,5 +98,12 @@ public class Work {
         }
         return res.toString();
     }
+
+    @Override
+    public String toString() {
+        return filename;
+    }
+    
+    
 
 }

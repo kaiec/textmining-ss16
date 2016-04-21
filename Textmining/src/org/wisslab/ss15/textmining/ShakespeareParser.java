@@ -24,12 +24,12 @@ import java.util.regex.Pattern;
  */
 public class ShakespeareParser {
 
-    public Work readFile(String filename) {
+    public Work readFile(String filename, AllWorks allWorks) {
 
         // Neue Strategie: Erst mal den gesamten Text in einen String einlesen, damit wir
         // zeilenübergreifend bereinigen können.
         String fulltext = "";
-        Work work = new Work();
+        Work work = new Work(allWorks);
         work.setFilename(filename);
         Map<String, Speaker> speakers = new HashMap<>();
 
@@ -138,7 +138,7 @@ public class ShakespeareParser {
         File dir = new File(directory);
         for (File f: dir.listFiles()) {
             if (f.isFile() && f.getName().toLowerCase().endsWith(".txt")) {
-                res.add(readFile(f.getAbsolutePath()));
+                readFile(f.getAbsolutePath(), res);
             } else if (f.isDirectory() && !f.getName().toLowerCase().endsWith("_characters")) {
                 res.addAll(readFiles(f.getAbsolutePath()));
             }

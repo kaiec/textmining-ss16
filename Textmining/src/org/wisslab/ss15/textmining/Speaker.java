@@ -64,17 +64,31 @@ public class Speaker {
     public double getTFIDF(String word) {
         Map<String, Double> tfmap = getTF();
         double tf = 0;
-        if (tfmap.get(word)!=null) tf = tfmap.get(word);
+        if (tfmap.get(word)!=null) tf = tfmap.getOrDefault(word, 0d);
         Map<String, Double> dfmap = getWork().getDF();
-        double df = dfmap.get(word);
+        double df = dfmap.getOrDefault(word, 0d);
         int D = work.getSpeakers().size();
-        return tf * Math.log(D/df);
+        return tf * Math.log(D/(df + 1));
+    }
+
+    public double getGlobalTFIDF(String word) {
+        Map<String, Double> tfmap = getTF();
+        double tf = 0;
+        if (tfmap.get(word)!=null) tf = tfmap.getOrDefault(word, 0d);
+        Map<String, Double> dfmap = getWork().getAllWorks().getDF();
+        double df = dfmap.getOrDefault(word, 0d);
+        int D = work.getSpeakers().size();
+        return tf * Math.log(D/(df + 1));
     }
     
-    public List<Double> getVSMVector() {
+    public List<Double> getVSMVector(List<String> words, boolean global) {
         List<Double> result = new ArrayList<>();
-        for (String word: work.getDF().keySet()) {
-            result.add(getTFIDF(word));
+        for (String word: words) {
+            if (global) {
+                result.add(getGlobalTFIDF(word));
+            } else {
+                result.add(getTFIDF(word));
+            }
         }
         return result;
     }
@@ -104,7 +118,7 @@ public class Speaker {
     
     @Override
     public String toString() {
-        return "Speaker{" + "name=" + name + ", work=" + work + '}';
+        return name + "(" + work + ')';
     }
     
     
