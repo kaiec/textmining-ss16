@@ -21,8 +21,8 @@ public class Speaker {
    private Work work;
    private List<Monologue> monologues = new ArrayList<>();
 
-   
-   
+
+
     public List<Monologue> getMonologues() {
         return monologues;
     }
@@ -48,7 +48,7 @@ public class Speaker {
         this.work = work;
         this.work.getSpeakers().add(this);
     }
-    
+
     public int getNumberOfMonologues() {
         return monologues.size();
     }
@@ -70,7 +70,7 @@ public class Speaker {
         int D = work.getSpeakers().size();
         return tf * Math.log(D/df);
     }
-    
+
     public List<Double> getVSMVector() {
         List<Double> result = new ArrayList<>();
         for (String word: work.getDF().keySet()) {
@@ -78,14 +78,14 @@ public class Speaker {
         }
         return result;
     }
-    
+
     public Map<String, Double> getTF() {
         Map<String, Double> result = new HashMap<>();
         Pattern p1 = Pattern.compile("[a-zA-Z']+");
-     
+
         for (String word: getAllText().split(" ")) {
             // Das ist quasi Tokenization, dafür gibt es Spezialbibliotheken
-            word = word.replaceAll(",", "");
+            word = word.replaceAll("\\,", "");
             word = word.replaceAll(".", "");
             word = word.replaceAll(":", "");
             word = word.replaceAll(";", "");
@@ -97,13 +97,13 @@ public class Speaker {
         return result;
     }
 
-    
+
     @Override
     public String toString() {
         return "Speaker{" + "name=" + name + ", work=" + work + '}';
     }
-    
-    
+
+
     public String getAllText() {
         StringBuilder res = new StringBuilder();
         for (Monologue m: monologues) {
@@ -112,8 +112,8 @@ public class Speaker {
         return res.toString();
     }
 
-   
-    
-    
-    
+
+
+
+
 }
