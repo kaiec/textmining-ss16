@@ -30,6 +30,7 @@ public class ShakespeareParser {
         // zeilenübergreifend bereinigen können.
         String fulltext = "";
         Work work = new Work();
+        work.setFilename(filename);
         Map<String, Speaker> speakers = new HashMap<>();
 
         // Google: java read text file line by line
@@ -53,8 +54,9 @@ public class ShakespeareParser {
         fulltext = m1.replaceAll("\t");
 
         // Ab hier wieder alte Strategie, zeilenweise Verarbeitung
-        List<String> path = new ArrayList<String>();
         StringBuffer tmp = new StringBuffer();
+        Act act = null;
+        Scene scene = null;
         for (String line : fulltext.split("\n")) {
             // Google: java regular expression
             // 2. Treffer: http://www.tutorialspoint.com/java/java_regular_expressions.htm
@@ -73,26 +75,34 @@ public class ShakespeareParser {
                 String tagname = m.group(2);
                 if (starttag) {
                     // System.out.println("Start: " + tagname);
-                    path.add(tagname);
+                    if (tagname.startsWith("ACT ")) {
+                        // String ist "ACT 1" --> "ACT " löschen
+                        act = new Act(work, Integer.parseInt(tagname.replace("ACT ", "")));
+                        // actNr = Integer.parseInt(tagname.substring(tagname.indexOf(" ") + 1));
+                        // actNr = Integer.parseInt(tagname.substring("ACT ".length()));
+                        // actNr = Integer.parseInt(tagname.substring(4));
+                        // actNr = Integer.parseInt(tagname.substring(4));
+                        // actNr = Integer.parseInt(tagname.split(" ")[1]);
+                    }
+                    if (tagname.startsWith("SCENE ")) {
+                        if (act==null) throw new RuntimeException("ACT FEHLT: " + work.getFilename() + " / " + tagname);
+                        scene = new Scene(act, Integer.parseInt(tagname.replace("SCENE ", "")));
+                    }
+
                     //System.out.println("You are here: " + path.toString());
 
-                    // Vielleicht etwas paranoid, aber haben wir wirklich das passende End-Tag?    
-                } else if (path.size() > 0 && tagname.equals(path.get(path.size() - 1))) {
+                    // Endtag
+                } else {
                     // System.out.println("End: " + tagname);
-                    Monologue mon = new Monologue();
-                    mon.setText(tmp.toString().trim());
-                    
-                    // Speaker verwalten und zuweisen
-                    speakers.putIfAbsent(tagname, new Speaker(tagname, work));
-                    mon.setSpeaker(speakers.get(tagname));
-                    
-                    mon.setPath(new ArrayList<String>(path));
-                    tmp.setLength(0);
-                    path.remove(path.size() - 1);
-                    if (mon.getText().length()>0) {
-                        work.add(mon);
+
+                    String text = tmp.toString().trim();
+                    if (text.length()==0) {
+                        continue;
                     }
-                    // System.out.println("You are here: " + path.toString());
+
+                    Speaker speaker = work.getOrCreateSpeaker(tagname);
+                    Monologue mon = new Monologue(scene, speaker, text);
+                    tmp.setLength(0);
                 }
             } else {
                 // Wenn es kein Tag ist, schauen wir noch, ob die Zeile eingerückt ist, falls ja: Text
