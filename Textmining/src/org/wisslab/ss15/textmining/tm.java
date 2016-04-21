@@ -22,7 +22,7 @@ public class tm {
             works = sp.readFiles(args[0]);
         }
             for (Speaker speaker: works.getAllSpeakers()) {
-                System.out.println(speaker.getName() + ": " + speaker.getNumberOfMonologues() + " times, " + speaker.getNumberOfWords() + " words, " + speaker.getNumberOfWords()/speaker.getNumberOfMonologues() + " words per monologue.");
+                System.out.println(speaker.getName() + ": " + speaker.getNumberOfMonologues() + " times, " + speaker.getNumberOfWords() + " words");
                 System.out.println(speaker.getAllText().split(" ").length);
             }
         

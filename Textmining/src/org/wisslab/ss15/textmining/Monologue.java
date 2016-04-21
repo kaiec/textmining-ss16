@@ -21,7 +21,10 @@ public class Monologue {
         this.speaker = speaker;
         this.text = text;
         this.speaker.getMonologues().add(this);
-        this.getScene().getAct().getWork().getMonologues().add(this);
+        Act act = scene.getAct();
+        Work work = act.getWork();
+        List<Monologue> monologues = work.getMonologues();
+        monologues.add(this);
     }
 
     public Scene getScene() {

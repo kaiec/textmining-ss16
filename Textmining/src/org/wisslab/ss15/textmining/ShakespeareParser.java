@@ -55,7 +55,8 @@ public class ShakespeareParser {
 
         // Ab hier wieder alte Strategie, zeilenweise Verarbeitung
         StringBuffer tmp = new StringBuffer();
-        Act act = null;
+        // Default Act, da teilweise Szenen vor dem ersten Akt existieren.
+        Act act = new Act(work, 0);
         Scene scene = null;
         for (String line : fulltext.split("\n")) {
             // Google: java regular expression
@@ -74,6 +75,8 @@ public class ShakespeareParser {
                 // Und wie heißt es?
                 String tagname = m.group(2);
                 if (starttag) {
+                    // Textpuffer löschen.
+                    tmp.setLength(0);
                     // System.out.println("Start: " + tagname);
                     if (tagname.startsWith("ACT ")) {
                         // String ist "ACT 1" --> "ACT " löschen
@@ -85,8 +88,13 @@ public class ShakespeareParser {
                         // actNr = Integer.parseInt(tagname.split(" ")[1]);
                     }
                     if (tagname.startsWith("SCENE ")) {
-                        if (act==null) throw new RuntimeException("ACT FEHLT: " + work.getFilename() + " / " + tagname);
-                        scene = new Scene(act, Integer.parseInt(tagname.replace("SCENE ", "")));
+                        try {
+                            int number = Integer.parseInt(tagname.replace("SCENE ", ""));
+                            scene = new Scene(act, number);
+                        } catch (NumberFormatException nfe) {
+                            // Wenn es keine Zahl ist, ist es keine Szene!
+                        }
+
                     }
 
                     //System.out.println("You are here: " + path.toString());
@@ -100,7 +108,15 @@ public class ShakespeareParser {
                         continue;
                     }
 
+                    
+                    // Alles außerhalb einer Szene, wie z.B. Prologe werden ignoriert.
+                    if (scene==null) {
+                        tmp.setLength(0);
+                        continue;
+                    }
+                    
                     Speaker speaker = work.getOrCreateSpeaker(tagname);
+
                     Monologue mon = new Monologue(scene, speaker, text);
                     tmp.setLength(0);
                 }
