@@ -79,14 +79,16 @@ public class Speaker {
         return result;
     }
     
+    private Map<String, Double> tfMap = null;
     public Map<String, Double> getTF() {
+        if (tfMap!=null) return tfMap;
         Map<String, Double> result = new HashMap<>();
         Pattern p1 = Pattern.compile("[a-zA-Z']+");
      
         for (String word: getAllText().split(" ")) {
             // Das ist quasi Tokenization, dafür gibt es Spezialbibliotheken
             word = word.replaceAll(",", "");
-            word = word.replaceAll(".", "");
+            word = word.replaceAll("\\.", "");
             word = word.replaceAll(":", "");
             word = word.replaceAll(";", "");
             word = word.toLowerCase();
@@ -94,6 +96,8 @@ public class Speaker {
             result.putIfAbsent(word, 0d);
             result.put(word, result.get(word) + 1);
         }
+        tfMap = result;
+        System.out.println("Term frequencies calculated for speaker " + name + ". Number of unique words: " + tfMap.keySet().size() + " / Overall: " + getAllText().split(" ").length);
         return result;
     }
 

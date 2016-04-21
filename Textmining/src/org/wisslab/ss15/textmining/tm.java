@@ -5,8 +5,6 @@
  */
 package org.wisslab.ss15.textmining;
 
-import java.util.List;
-
 /**
  *
  * @author kai
@@ -23,10 +21,8 @@ public class tm {
         }
             for (Speaker speaker: works.getAllSpeakers()) {
                 System.out.println(speaker.getName() + ": " + speaker.getNumberOfMonologues() + " times, " + speaker.getNumberOfWords() + " words");
-                System.out.println(speaker.getVSMVector().size());
-                
+                System.out.println(speaker.getVSMVector());
             }
-        
         
     }
     

@@ -55,17 +55,19 @@ public class Work {
         return new Speaker(name, this);
     }
     
-    
+    private Map<String, Double> dfMap = null;
     public Map<String, Double> getDF() {
+        if (dfMap!=null) return dfMap;
         Map<String, Double> res = new HashMap<>();
         for (Speaker s:getSpeakers()) {
-            Map<String, Double> tf = s.getTF();
-            for (String word: tf.keySet()) {
+            for (String word: s.getTF().keySet()) {
                 res.putIfAbsent(word, 0d);
                 res.put(word, res.get(word) + 1);
             
             }
         }
+        dfMap = res;
+        System.out.println("Document frequencies calculates for " + getSpeakers().size() + " speakers in " + filename + ". Number of words: " + dfMap.keySet().size());
         return res;
     }
     
