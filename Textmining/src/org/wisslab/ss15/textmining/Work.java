@@ -7,9 +7,7 @@ package org.wisslab.ss15.textmining;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -61,26 +59,6 @@ public class Work {
             }
         }
         return new Speaker(name, this);
-    }
-    
-    private Map<String, Double> dfMap = null;
-    public Map<String, Double> getDF() {
-        if (dfMap!=null) return dfMap;
-        Map<String, Double> res = new HashMap<>();
-        for (Speaker s:getSpeakers()) {
-            for (String word: s.getTF().keySet()) {
-                res.putIfAbsent(word, 0d);
-                res.put(word, res.get(word) + 1);
-            
-            }
-        }
-        dfMap = res;
-        System.out.println("Document frequencies calculates for " + getSpeakers().size() + " speakers in " + filename + ". Number of words: " + dfMap.keySet().size());
-        return res;
-    }
-    
-    public List<String> getUniqueWords() {
-        return new ArrayList<String>(getDF().keySet());
     }
     
     

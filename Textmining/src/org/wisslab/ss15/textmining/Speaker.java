@@ -6,11 +6,7 @@
 package org.wisslab.ss15.textmining;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -59,60 +55,6 @@ public class Speaker {
             sum += m.getText().split(" ").length;
         }
         return sum;
-    }
-
-    public double getTFIDF(String word) {
-        Map<String, Double> tfmap = getTF();
-        double tf = 0;
-        if (tfmap.get(word)!=null) tf = tfmap.getOrDefault(word, 0d);
-        Map<String, Double> dfmap = getWork().getDF();
-        double df = dfmap.getOrDefault(word, 0d);
-        int D = work.getSpeakers().size();
-        return tf * Math.log(D/(df + 1));
-    }
-
-    public double getGlobalTFIDF(String word) {
-        Map<String, Double> tfmap = getTF();
-        double tf = 0;
-        if (tfmap.get(word)!=null) tf = tfmap.getOrDefault(word, 0d);
-        Map<String, Double> dfmap = getWork().getAllWorks().getDF();
-        double df = dfmap.getOrDefault(word, 0d);
-        int D = work.getSpeakers().size();
-        return tf * Math.log(D/(df + 1));
-    }
-    
-    public List<Double> getVSMVector(List<String> words, boolean global) {
-        List<Double> result = new ArrayList<>();
-        for (String word: words) {
-            if (global) {
-                result.add(getGlobalTFIDF(word));
-            } else {
-                result.add(getTFIDF(word));
-            }
-        }
-        return result;
-    }
-    
-    private Map<String, Double> tfMap = null;
-    public Map<String, Double> getTF() {
-        if (tfMap!=null) return tfMap;
-        Map<String, Double> result = new HashMap<>();
-        Pattern p1 = Pattern.compile("[a-zA-Z']+");
-     
-        for (String word: getAllText().split(" ")) {
-            // Das ist quasi Tokenization, dafür gibt es Spezialbibliotheken
-            word = word.replaceAll(",", "");
-            word = word.replaceAll("\\.", "");
-            word = word.replaceAll(":", "");
-            word = word.replaceAll(";", "");
-            word = word.toLowerCase();
-            if (!p1.matcher(word).matches()) continue;
-            result.putIfAbsent(word, 0d);
-            result.put(word, result.get(word) + 1);
-        }
-        tfMap = result;
-        System.out.println("Term frequencies calculated for speaker " + name + ". Number of unique words: " + tfMap.keySet().size() + " / Overall: " + getAllText().split(" ").length);
-        return result;
     }
 
     
