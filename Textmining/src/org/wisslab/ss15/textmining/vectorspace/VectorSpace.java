@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wisslab.ss15.textmining;
+package org.wisslab.ss15.textmining.vectorspace;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,9 +27,30 @@ public class VectorSpace {
     public long getDF(String dimension) {
         return dfMap.getOrDefault(dimension, 0l);
     }
+    
+    public DocumentVector getDocument(String id) {
+        return index.get(id);
+    }
 
-    // Ähnlichkeitsberechnung, vgl. https://en.wikipedia.org/wiki/Cosine_similarity
-    // http://stackoverflow.com/questions/3622112/vector-space-model-algorithm-in-java-to-get-the-similarity-score-between-two-peo
+    public DocumentPair getNearestNeighbour(DocumentVector dv) {
+        double maxSim = 0;
+        DocumentVector maxDocument = null;
+        for (String id : index.keySet()) {
+            if (dv.getId().equals(id)) {
+                continue;
+            }
+            DocumentVector dv2 = index.get(id);
+            double sim = this.getCosineSimilarity(dv.getId(), id);
+            if (sim > maxSim) {
+                maxSim = sim;
+                maxDocument = dv2;
+            }
+        }
+        return new DocumentPair(dv, maxDocument, maxSim);
+     
+    }
+        // Ähnlichkeitsberechnung, vgl. https://en.wikipedia.org/wiki/Cosine_similarity
+        // http://stackoverflow.com/questions/3622112/vector-space-model-algorithm-in-java-to-get-the-similarity-score-between-two-peo
     public double getCosineSimilarity(String id1, String id2) {
         DocumentVector v1 = index.get(id1);
         if (v1 == null) {
@@ -45,7 +66,7 @@ public class VectorSpace {
         for (String k : both) {
             scalar += v1.getTfIdf(k) * v2.getTfIdf(k);
         }
-        return scalar / Math.sqrt(v1.getTfIdfNormSqr() * v2.getTfIdfNormSqr());
+        return scalar / (v1.getTfIdfNorm() * v2.getTfIdfNorm());
     }
 
     public void addDocument(String id, List<String> tokens) {
@@ -64,5 +85,6 @@ public class VectorSpace {
         }
         index.put(id, dv);
     }
+
 
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wisslab.ss15.textmining;
+package org.wisslab.ss15.textmining.vectorspace;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +23,12 @@ public class DocumentVector {
         this.vectorSpace = vectorSpace;
         this.id = id;
     }
+
+    public String getId() {
+        return id;
+    }
+    
+    
 
     private Map<String, Long> tfMap = new HashMap<>();
 
@@ -48,7 +54,7 @@ public class DocumentVector {
 
     private double norm = -1;
 
-    public double getTfIdfNormSqr() {
+    public double getTfIdfNorm() {
         if (norm > -0.5) {
             return norm;
         }
@@ -56,6 +62,7 @@ public class DocumentVector {
         for (String k : getDimensions()) {
             norm += getTfIdf(k) * getTfIdf(k);
         }
+        norm = Math.sqrt(norm);
         return norm;
     }
 }

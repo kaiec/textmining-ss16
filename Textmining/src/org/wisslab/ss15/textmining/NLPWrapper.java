@@ -15,9 +15,37 @@ import java.util.regex.Pattern;
  */
 public class NLPWrapper {
 
+    // Tokenizer tokenizer = null;
+
+    public NLPWrapper() {
+        /*
+        InputStream modelIn = null;
+        try {
+            modelIn = new FileInputStream("en-token.bin");
+            TokenizerModel model = new TokenizerModel(modelIn);
+            tokenizer = new TokenizerME(model);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            if (modelIn != null) {
+                try {
+                    modelIn.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        */
+
+    }
+
     // Unser Behelfs-Tokenizer aus der Vorlesung
     public List<String> tokenize(String input) {
         List<String> result = new ArrayList<>();
+        /* result.addAll(Arrays.asList(tokenizer.tokenize(input)));
+         return result;
+         */
         Pattern p1 = Pattern.compile("[a-zA-Z']+");
         for (String word : input.split(" ")) {
             // Das ist quasi Tokenization, dafür gibt es Spezialbibliotheken
@@ -32,6 +60,7 @@ public class NLPWrapper {
             result.add(word);
         }
         return result;
+
     }
 
 }
