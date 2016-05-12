@@ -3,3 +3,5 @@ Textmining/nbproject/private/config.properties
 Textmining/nbproject/private/private.properties
 Textmining/nbproject/private/
 /Textmining/dist/
+Textmining/apache-opennlp-1.6.0/
+Textmining/en-token.bin
